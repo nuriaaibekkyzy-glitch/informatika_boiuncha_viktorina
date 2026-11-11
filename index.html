@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Информатика — Интерактивдүү окуу платформасы</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============ ЖОГОРКУ ПАНЕЛЬ ============ -->
+  <header class="topbar">
+    <div class="brand" data-go="home">
+      <span class="brand-mark">i</span>
+      <div>
+        <strong>Информатика</strong>
+        <small>ИИУ КЭУ · 1-курс · 580100 «Экономика»</small>
+      </div>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Меню">☰</button>
+    <nav class="nav" id="nav">
+      <button data-go="home" class="active">Башкы бет</button>
+      <button data-go="quiz">Викторина</button>
+      <button data-go="cards">Флэш-карталар</button>
+      <button data-go="match">Дал келтирүү</button>
+      <button data-go="tf">Чынбы-жалганбы</button>
+      <button data-go="excel">Excel тренажёру</button>
+      <button data-go="wheel">Дөңгөлөк</button>
+      <button data-go="results">Жыйынтыктар</button>
+    </nav>
+    <div class="student">
+      <input id="studentName" type="text" placeholder="Аты-жөнүңүз" maxlength="40">
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ БАШКЫ БЕТ ============ -->
+    <section class="view active" id="view-home">
+      <div class="hero">
+        <div class="hero-text">
+          <p class="eyebrow">Силлабустун негизинде · 2026–2027 окуу жылы</p>
+          <h1>Билимиңди оюн аркылуу текшер</h1>
+          <p class="lead">«Информатика» сабагынын 48 темасы 7 модулга топтолду: компьютер жана Windows, PowerPoint, Word, Excel, Access. Модулду тандап, ыңгайлуу ыкма менен машыгыңыз.</p>
+          <div class="hero-actions">
+            <button class="btn primary" data-go="quiz">Викторинаны баштоо</button>
+            <button class="btn ghost" data-go="wheel">Сабакта дөңгөлөктү айлантуу</button>
+          </div>
+        </div>
+        <div class="hero-stats" id="heroStats"></div>
+      </div>
+
+      <div class="methods">
+        <h2>Интерактивдүү ыкмалар</h2>
+        <div class="method-grid">
+          <article class="method" data-go="quiz"><span class="m-ico">❓</span><h3>Викторина</h3><p>Убакыт менен тест, түшүндүрмө жана силлабус шкаласы боюнча баа (A…F).</p></article>
+          <article class="method" data-go="cards"><span class="m-ico">🃏</span><h3>Флэш-карталар</h3><p>Терминди көрүп, аныктамасын эсте. «Билем / Кайталайм» белгиси менен.</p></article>
+          <article class="method" data-go="match"><span class="m-ico">🔗</span><h3>Дал келтирүү</h3><p>Терминдерди аныктамалары менен туташтыр — тез жана катасыз.</p></article>
+          <article class="method" data-go="tf"><span class="m-ico">⚡</span><h3>Чынбы-жалганбы</h3><p>60 секунддук блиц: канча туура жооп бере аласың?</p></article>
+          <article class="method" data-go="excel"><span class="m-ico">📊</span><h3>Excel тренажёру</h3><p>Чыныгы формула жаз: СУММ, СРЗНАЧ, ЕСЛИ, СЧЁТЕСЛИ, СУММЕСЛИ…</p></article>
+          <article class="method" data-go="wheel"><span class="m-ico">🎡</span><h3>Тема дөңгөлөгү</h3><p>Сабакта талкуу үчүн теманы же студентти кокусунан танда.</p></article>
+        </div>
+      </div>
+
+      <div class="modules-head">
+        <h2>Модулдар жана темалар</h2>
+        <div class="seg" id="semFilter">
+          <button data-sem="0" class="on">Баары</button>
+          <button data-sem="1">I семестр</button>
+          <button data-sem="2">II семестр</button>
+        </div>
+      </div>
+      <div class="module-grid" id="moduleGrid"></div>
+    </section>
+
+    <!-- ============ ВИКТОРИНА ============ -->
+    <section class="view" id="view-quiz">
+      <div class="panel" id="quizSetup">
+        <h2>Викторина</h2>
+        <p class="muted">Модулду жана суроолордун санын тандаңыз.</p>
+        <label class="field">Модуль
+          <select id="quizModule" class="module-select"></select>
+        </label>
+        <div class="field">Суроолордун саны
+          <div class="seg" id="quizCount">
+            <button data-n="5">5</button>
+            <button data-n="10" class="on">10</button>
+            <button data-n="15">15</button>
+            <button data-n="20">20</button>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox" id="quizTimer" checked> Ар бир суроого 30 секунд</label>
+        <button class="btn primary big" id="quizStart">Баштоо</button>
+      </div>
+
+      <div class="panel hidden" id="quizPlay">
+        <div class="quiz-top">
+          <span id="quizProgress" class="pill">1 / 10</span>
+          <span id="quizModTag" class="pill soft"></span>
+          <span id="quizScore" class="pill ok">Упай: 0</span>
+        </div>
+        <div class="bar"><div id="quizBar"></div></div>
+        <div class="timer hidden" id="quizTimerBox"><div id="quizTimerFill"></div><span id="quizTimerText">30</span></div>
+        <h3 id="quizQuestion" class="question"></h3>
+        <div id="quizOptions" class="options"></div>
+        <div id="quizFeedback" class="feedback hidden"></div>
+        <div class="row-end">
+          <button class="btn primary hidden" id="quizNext">Кийинки →</button>
+        </div>
+      </div>
+
+      <div class="panel hidden" id="quizEnd">
+        <div class="grade-badge" id="quizGrade">A</div>
+        <h2 id="quizEndTitle"></h2>
+        <p id="quizEndText" class="lead"></p>
+        <div id="quizReview" class="review"></div>
+        <div class="row-center">
+          <button class="btn primary" id="quizAgain">Кайра тапшыруу</button>
+          <button class="btn ghost" data-go="results">Жыйынтыктар</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ФЛЭШ-КАРТАЛАР ============ -->
+    <section class="view" id="view-cards">
+      <div class="panel">
+        <div class="toolbar">
+          <h2>Флэш-карталар</h2>
+          <select id="cardsModule" class="module-select"></select>
+        </div>
+        <p class="muted">Картаны басып же <kbd>Пробел</kbd> баскычы менен буруңуз. <kbd>←</kbd> <kbd>→</kbd> — жылдыруу.</p>
+        <div class="flash-wrap">
+          <div class="flash" id="flash" tabindex="0">
+            <div class="flash-inner">
+              <div class="flash-face front"><small id="flashMod"></small><span id="flashTerm"></span><em>басып, аныктамасын көр</em></div>
+              <div class="flash-face back"><span id="flashDef"></span></div>
+            </div>
+          </div>
+        </div>
+        <div class="flash-ctrl">
+          <button class="btn ghost" id="flashPrev">← Мурунку</button>
+          <span id="flashCount" class="pill">1 / 10</span>
+          <button class="btn ghost" id="flashNext">Кийинки →</button>
+        </div>
+        <div class="flash-ctrl">
+          <button class="btn warn" id="flashAgain">🔁 Кайталайм</button>
+          <button class="btn ok" id="flashKnow">✓ Билем</button>
+          <button class="btn ghost" id="flashShuffle">🔀 Аралаштыруу</button>
+        </div>
+        <p class="center muted" id="flashStat"></p>
+      </div>
+    </section>
+
+    <!-- ============ ДАЛ КЕЛТИРҮҮ ============ -->
+    <section class="view" id="view-match">
+      <div class="panel">
+        <div class="toolbar">
+          <h2>Дал келтирүү</h2>
+          <select id="matchModule" class="module-select"></select>
+        </div>
+        <p class="muted">Сол жактан терминди, оң жактан анын аныктамасын тандаңыз.</p>
+        <div class="quiz-top">
+          <span class="pill" id="matchTime">⏱ 0 с</span>
+          <span class="pill bad" id="matchErr">Ката: 0</span>
+          <span class="pill ok" id="matchDone">Туташты: 0 / 6</span>
+          <button class="btn ghost small" id="matchNew">Жаңы раунд</button>
+        </div>
+        <div class="match-board">
+          <div class="match-col" id="matchLeft"></div>
+          <div class="match-col" id="matchRight"></div>
+        </div>
+        <div id="matchWin" class="feedback ok hidden"></div>
+      </div>
+    </section>
+
+    <!-- ============ ЧЫНБЫ-ЖАЛГАНБЫ ============ -->
+    <section class="view" id="view-tf">
+      <div class="panel">
+        <div class="toolbar">
+          <h2>Чынбы-жалганбы: блиц</h2>
+          <select id="tfModule" class="module-select"></select>
+        </div>
+        <div id="tfIntro" class="center">
+          <p class="lead">60 секунд ичинде мүмкүн болушунча көп ырастоого жооп бериңиз.<br>Туура — <b>+1</b>, ката — <b>−1</b>.</p>
+          <button class="btn primary big" id="tfStart">Баштоо</button>
+        </div>
+        <div id="tfPlay" class="hidden">
+          <div class="quiz-top">
+            <span class="pill" id="tfTime">60</span>
+            <span class="pill ok" id="tfScore">Упай: 0</span>
+            <span class="pill soft" id="tfStreak">Катар: 0</span>
+          </div>
+          <div class="tf-card" id="tfCard"></div>
+          <div class="tf-btns">
+            <button class="btn bad big" id="tfNo">✗ Жалган <kbd>F</kbd></button>
+            <button class="btn ok big" id="tfYes">✓ Чын <kbd>J</kbd></button>
+          </div>
+          <p id="tfFlash" class="center muted"></p>
+        </div>
+        <div id="tfEnd" class="center hidden">
+          <div class="grade-badge" id="tfBig">0</div>
+          <p class="lead" id="tfEndText"></p>
+          <div id="tfMistakes" class="review"></div>
+          <button class="btn primary" id="tfAgain">Дагы бир жолу</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ EXCEL ТРЕНАЖЁРУ ============ -->
+    <section class="view" id="view-excel">
+      <div class="panel">
+        <h2>Excel тренажёру</h2>
+        <p class="muted">Тапшырманы окуп, формуланы <code>=</code> белгиси менен жазыңыз. Аргументтерди <code>;</code> менен бөлүңүз. Орусча (СУММ) жана англисче (SUM) аталыштар кабыл алынат.</p>
+        <div class="excel-layout">
+          <div>
+            <div class="sheet-wrap"><table class="sheet" id="sheet"></table></div>
+            <div class="formula-bar">
+              <span class="fx">fx</span>
+              <input id="fxInput" type="text" placeholder="=СУММ(B2:B6)" autocomplete="off" spellcheck="false">
+              <button class="btn primary" id="fxCheck">Текшерүү</button>
+            </div>
+            <div id="fxResult" class="feedback hidden"></div>
+            <details class="hint-box">
+              <summary>Колдоого алынган функциялар</summary>
+              <p>СУММ · СРЗНАЧ · МАКС · МИН · СЧЁТ · ЕСЛИ · И · ИЛИ · ОКРУГЛ · СУММЕСЛИ · СЧЁТЕСЛИ · ABS · КОРЕНЬ · СТЕПЕНЬ<br>
+              Операторлор: <code>+ − * / ^ &amp; = &lt;&gt; &gt; &lt; &gt;= &lt;=</code>, шилтемелер <code>A1</code>, <code>$B$2</code>, диапазондор <code>B2:B6</code>.</p>
+            </details>
+          </div>
+          <div class="task-list" id="taskList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ДӨҢГӨЛӨК ============ -->
+    <section class="view" id="view-wheel">
+      <div class="panel">
+        <div class="toolbar">
+          <h2>Тема дөңгөлөгү</h2>
+          <div class="seg" id="wheelMode">
+            <button data-mode="topics" class="on">Темалар</button>
+            <button data-mode="names">Студенттер</button>
+          </div>
+        </div>
+        <div class="wheel-layout">
+          <div class="wheel-box">
+            <div class="wheel-pointer">▼</div>
+            <canvas id="wheel" width="460" height="460"></canvas>
+            <button class="btn primary big" id="wheelSpin">Айлантуу</button>
+          </div>
+          <div class="wheel-side">
+            <div id="wheelTopicOpts">
+              <label class="field">Модуль
+                <select id="wheelModule" class="module-select"></select>
+              </label>
+            </div>
+            <div id="wheelNameOpts" class="hidden">
+              <label class="field">Студенттердин тизмеси (ар бири жаңы саптан)
+                <textarea id="wheelNames" rows="8" placeholder="Айгерим&#10;Бакыт&#10;Нурсултан"></textarea>
+              </label>
+              <label class="check"><input type="checkbox" id="wheelRemove" checked> Тандалган студентти тизмеден алып салуу</label>
+            </div>
+            <div class="wheel-result" id="wheelResult">
+              <small>Натыйжа</small>
+              <strong>Дөңгөлөктү айлантыңыз</strong>
+            </div>
+            <div class="feedback soft hidden" id="wheelTask"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ЖЫЙЫНТЫКТАР ============ -->
+    <section class="view" id="view-results">
+      <div class="panel">
+        <div class="toolbar">
+          <h2>Жыйынтыктар</h2>
+          <button class="btn ghost small" id="clearHistory">Тарыхты тазалоо</button>
+        </div>
+        <div class="stat-grid" id="statGrid"></div>
+        <h3>Баалоо шкаласы (силлабус боюнча)</h3>
+        <div class="scale" id="gradeScale"></div>
+        <h3>Акыркы аракеттер</h3>
+        <div class="history" id="history"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    «Экономикалык-математикалык моделдөө жана санариптик технологиялар» кафедрасы · М. Рыскулбеков атындагы ИИУ КЭУ · Бишкек 2026
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
